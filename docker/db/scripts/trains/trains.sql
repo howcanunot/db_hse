@@ -6,7 +6,9 @@ CREATE TABLE "City" (
 
 CREATE TABLE "Station" (
   "Name" varchar PRIMARY KEY,
-  "TracksNr" integer
+  "TracksNr" integer,
+  "CityName" varchar,
+  "Region" varchar
 );
 
 
@@ -18,25 +20,22 @@ CREATE TABLE "Train" (
 );
 
 CREATE TABLE "Connection" (
-  "From" varchar,
-  "To" varchar
-);
-
-CREATE TABLE "StationSchedule" (
-  "StationName" varchar,
+  "FromStation" varchar,
+  "ToStation" varchar,
   "TrainNr" integer,
-  "Arrival" timestamp,
-  "Departure" timestamp
+  "Departure" timestamp,
+  "Arrival" timestamp
 );
 
-ALTER TABLE "Connection" ADD FOREIGN KEY ("From") REFERENCES "Station" ("Name");
 
-ALTER TABLE "Connection" ADD FOREIGN KEY ("To") REFERENCES "Station" ("Name");
+ALTER TABLE "Station" ADD FOREIGN KEY ("CityName", "Region") REFERENCES "City" ("Name", "Region");
 
-ALTER TABLE "StationSchedule" ADD FOREIGN KEY ("TrainNr") REFERENCES "Train" ("TrainNr");
+ALTER TABLE  "Connection" ADD FOREIGN KEY ("FromStation") REFERENCES "Station" ("Name");
+
+ALTER TABLE  "Connection" ADD FOREIGN KEY ("ToStation") REFERENCES "Station" ("Name");
+
+ALTER TABLE "Connection" ADD FOREIGN KEY ("TrainNr") REFERENCES "Train" ("TrainNr");
 
 ALTER TABLE "Train" ADD FOREIGN KEY ("StartStationName") REFERENCES "Station" ("Name");
 
 ALTER TABLE "Train" ADD FOREIGN KEY ("EndStationName") REFERENCES "Station" ("Name");
-
-ALTER TABLE "StationSchedule" ADD FOREIGN KEY ("StationName") REFERENCES "Station" ("Name");
